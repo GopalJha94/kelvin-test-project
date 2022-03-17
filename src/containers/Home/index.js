@@ -91,7 +91,7 @@ function App() {
           <form onSubmit={ event => _handleSubmitFormData(event)}>
             <div className="form-group">
               <label for="inputWordSearch">Enter Word</label>
-              <input type="text" className="form-control" id="form-field-nameInput" aria-describedby="searchWord" name="nameInput" onChange={ event => _handleChange(event)} placeholder="Enter your search word" />
+              <input type="text" className="form-control" aria-label="form-field-nameInput" aria-describedby="searchWord" name="nameInput" onChange={ event => _handleChange(event)} placeholder="Enter your search word" />
               { error ? (
                   <div>{ error }</div>
                 ) : ''
