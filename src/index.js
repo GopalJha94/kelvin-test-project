@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
 
+import { displayErrorMessage } from './utils'
+
 
 axios.interceptors.request.use( request => {
   //if you want to pass any headers or something with every request you can do here
@@ -15,6 +17,14 @@ axios.interceptors.request.use( request => {
 axios.interceptors.response.use( response => {
   //want to use something with every reponse you can add with key value pair
   return response
+},
+(err) => {
+  if(err.response.status === 404){
+    displayErrorMessage('No Definition Found')
+  }else if(err.response.status === 500){
+    displayErrorMessage('Something Went Wrong')
+  }
+   
 })
 
 ReactDOM.render(

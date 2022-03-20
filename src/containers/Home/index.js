@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import axios from 'axios'
 
-import { displayErrorMessage } from '../../utils'
+import {ApiService} from '../../ApiCalls/SearchWordApi'
 
 function App() {
 
   //will store data in data state after input search
-  const [data, setData ] = useState([])
+  const [data, setDatas ] = useState([])
   //will store nameInput value
   const [inputValue, setInputValue] = useState('')
   //for error case on nameInput
@@ -23,20 +22,8 @@ function App() {
   //making api call to search data and return array of data to store
   const callApiToSearchRelateWord = async () => {
     
-    try{
-      const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue.trim()}`)
-      if(response.status === 200){
-        const { meanings } = response.data[0]
-        if(meanings.length > 0){
-          return meanings
-        }
-        displayErrorMessage('No Record Found')
-        return false 
-      }
-    }catch(error){
-      displayErrorMessage('Something Went Wrong')
-      return false
-    }
+    const searchByWordResponse = await ApiService(inputValue)
+    return searchByWordResponse
   }
 
   //validating form inputValue
@@ -55,15 +42,14 @@ function App() {
     if(_validateForm()){
       const storeApiResponse = await callApiToSearchRelateWord()
       if(storeApiResponse !== false){
-        setData(storeApiResponse)
+        setDatas(storeApiResponse)
       }
     }
   }
 
   //integrating data on rows
-  const integrateSearchData = () => {
-    if(data.length > 0){
-      let count = 0
+  const integrateSearchData = (count = 0) => {
+    if(data?.length > 0 && data !== undefined){
       return data.map( (data, index) => {
        return data.definitions.map( (record, key) => {
         count++
@@ -97,7 +83,7 @@ function App() {
                 ) : ''
               }
             </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
+            <button type="submit" aria-label="form-submitButton" className="btn btn-primary">Submit</button>
           </form>
           <table className="table table-striped w-auto">
             <thead>
